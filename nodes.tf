@@ -23,7 +23,7 @@ resource "aws_instance" "managers" {
     inline = [
       "sudo service docker start",
       "sudo usermod -a -G docker ec2-user",
-      "SWARM_JOIN_CMD=$(docker swarm init | grep -oP 'docker swarm join.*' | head -n 1)",
+      "SWARM_JOIN_CMD=$(docker swarm init --advertise-addr ${self.public_ip} | grep -oP 'docker swarm join.*' | head -n 1)",
       "touch /home/ec2-user/swarm_join_cmd.txt",
       "echo $SWARM_JOIN_CMD > /home/ec2-user/swarm_join_cmd.txt"
     ]
